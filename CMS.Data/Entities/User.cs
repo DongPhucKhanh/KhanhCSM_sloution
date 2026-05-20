@@ -1,21 +1,15 @@
-﻿//Họ và tên: Đồng Phúc Khánh
-//    MSSV:2123110051
-//    version:1.0
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace CMS.Data.Entities
 {
     public class User
     {
         public int Id { get; set; }
-        public string Username { get; set; }
-        public string PasswordHash { get; set; }
-        public string FullName { get; set; }
-        public string Role { get; set; } // Quản trị viên hoặc Biên tập viên
-
+        public string Username { get; set; } // Tên đăng nhập
+        public string FullName { get; set; } // Họ và tên người dùng
+        public string Email { get; set; } // Địa chỉ Email
+        public string Role { get; set; } // Vai trò (Administrator, Editor, Viewer)
+        public bool IsActive { get; set; } // Trạng thái hoạt động
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
     }
 }

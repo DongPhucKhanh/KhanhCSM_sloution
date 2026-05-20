@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CMS.Data.Entities
 {
@@ -17,6 +13,5 @@ namespace CMS.Data.Entities
         // Khóa ngoại liên kết tới Category
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
-
     }
 }
