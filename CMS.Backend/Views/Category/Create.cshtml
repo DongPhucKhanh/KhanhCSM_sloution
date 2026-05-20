@@ -1,0 +1,27 @@
+﻿@model CMS.Data.Entities.Category
+
+<h2 class="text-success my-3">THÊM DANH MỤC MỚI</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div class="form-group mb-3">
+                <label class="form-label fw-bold">Tên danh mục</label>
+                <input asp-for="Name" class="form-control" placeholder="Nhập tên danh mục..." required />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label fw-bold">Mô tả</label>
+                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Nhập mô tả danh mục..."></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Lưu lại</button>
+                <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+            </div>
+        </form>
+    </div>
+</div>
