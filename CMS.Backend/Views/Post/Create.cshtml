@@ -1,0 +1,55 @@
+﻿@model CMS.Data.Entities.Post
+@inject CMS.Data.ApplicationDbContext _context
+
+@{
+    // Đặt khai báo ở đầu trang để toàn bộ file HTML đều dùng được biến này
+    var dbCategories = _context.Categories.ToList();
+}
+
+<h2 class="text-success my-3">THÊM BÀI VIẾT MỚI</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div class="form-group mb-3">
+                <label class="form-label fw-bold">Tiêu đề bài viết</label>
+                <input asp-for="Title" class="form-control" placeholder="Nhập tiêu đề bài viết..." required />
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label fw-bold">Chọn danh mục bài viết</label>
+                <select asp-for="CategoryId" class="form-select" required>
+                    <option value="">-- Chọn danh mục bài viết --</option>
+                    @foreach (var cat in dbCategories)
+                    {
+                        <option value="@cat.Id">@cat.Name (ID: @cat.Id)</option>
+                    }
+                </select>
+
+                @if (dbCategories.Count == 0)
+                {
+                    <span class="text-danger d-block mt-1 fw-bold">
+                       
+                    </span>
+                }
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label fw-bold">Chọn hình ảnh từ thư viện máy</label>
+                <input type="file" name="imageFile" class="form-control" accept="image/*" required />
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label fw-bold">Nội dung bài viết</label>
+                <textarea asp-for="Content" class="form-control" rows="6" placeholder="Nhập nội dung bài viết chi tiết..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Đăng bài</button>
+                <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+            </div>
+        </form>
+    </div>
+</div>

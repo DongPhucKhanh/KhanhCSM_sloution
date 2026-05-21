@@ -4,6 +4,7 @@ using CMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260521014854_AddPasswordToUserTable")]
+    partial class AddPasswordToUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,15 +54,15 @@ namespace CMS.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("CategoriesProducts");
                 });
@@ -213,8 +216,7 @@ namespace CMS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryProductId")
-                        .IsUnique();
+                    b.HasIndex("CategoryProductId");
 
                     b.ToTable("Products");
                 });
@@ -256,17 +258,6 @@ namespace CMS.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("CMS.Data.Entities.CategoryProduct", b =>
-                {
-                    b.HasOne("CMS.Data.Entities.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("CMS.Data.Entities.Order", b =>
@@ -313,8 +304,8 @@ namespace CMS.Data.Migrations
             modelBuilder.Entity("CMS.Data.Entities.Product", b =>
                 {
                     b.HasOne("CMS.Data.Entities.CategoryProduct", "CategoryProduct")
-                        .WithOne("Product")
-                        .HasForeignKey("CMS.Data.Entities.Product", "CategoryProductId")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -328,8 +319,7 @@ namespace CMS.Data.Migrations
 
             modelBuilder.Entity("CMS.Data.Entities.CategoryProduct", b =>
                 {
-                    b.Navigation("Product")
-                        .IsRequired();
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("CMS.Data.Entities.Customer", b =>

@@ -1,13 +1,22 @@
-﻿//Họ và tên: Đồng Phúc Khánh
-//    MSSV: 2123110051
-//    version: 1.0
-@model IEnumerable<CMS.Data.Entities.User>
+﻿@model IEnumerable<CMS.Data.Entities.User>
+
+@{
+    // Họ và tên: Đồng Phúc Khánh
+    // MSSV: 2123110051
+    // version: 1.1 (Nâng cấp chức năng)
+    ViewData["Title"] = "Quản lý người dùng";
+}
 
 <div class="container mt-4">
-    <h2 class="mb-4 text-success text-center fw-bold">QUẢN LÝ DANH SÁCH NGƯỜI DÙNG</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-success fw-bold m-0">QUẢN LÝ DANH SÁCH NGƯỜI DÙNG</h2>
+        <a asp-action="Create" class="btn btn-success fw-bold">
+            <i class="fas fa-user-plus"></i> Thêm người dùng mới
+        </a>
+    </div>
 
     <div class="table-responsive shadow-sm rounded">
-        <table class="table table-bordered table-striped align-middle mb-0">
+        <table class="table table-bordered table-striped align-middle mb-0 text-center">
             <thead class="table-success text-dark">
                 <tr>
                     <th style="width: 80px;">ID</th>
@@ -15,20 +24,21 @@
                     <th>Họ và tên</th>
                     <th>Email</th>
                     <th>Quyền quản trị</th>
-                    <th class="text-center">Trạng thái</th>
+                    <th>Trạng thái</th>
                     <th>Ngày tạo</th>
+                    <th style="width: 180px;">Chức năng</th>
                 </tr>
             </thead>
             <tbody>
-                @if (Model != null)
+                @if (Model != null && Model.Any())
                 {
                     foreach (var item in Model)
                     {
                         <tr>
                             <td class="fw-bold text-secondary">@item.Id</td>
                             <td class="fw-bold">@item.Username</td>
-                            <td>@item.FullName</td>
-                            <td>@item.Email</td>
+                            <td class="text-start">@item.FullName</td>
+                            <td class="text-start">@item.Email</td>
                             <td>
                                 @if (item.Role == "Administrator")
                                 {
@@ -43,19 +53,34 @@
                                     <span class="badge bg-secondary">@item.Role</span>
                                 }
                             </td>
-                            <td class="text-center">
+                            <td>
                                 @if (item.IsActive)
                                 {
-                                    <span class="badge bg-success rounded-pill"><i class="bi bi-check-circle"></i> Đang hoạt động</span>
+                                    <span class="badge bg-success rounded-pill">Đang hoạt động</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-danger rounded-pill"><i class="bi bi-x-circle"></i> Đang khóa</span>
+                                    <span class="badge bg-danger rounded-pill">Đang khóa</span>
                                 }
                             </td>
                             <td class="text-muted small">@item.CreatedDate.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm fw-bold text-dark me-1">
+                                    <i class="fas fa-edit"></i> Sửa
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm fw-bold"
+                                   onclick="return confirm('Bạn có chắc chắn muốn xóa người dùng @item.Username không?')">
+                                    <i class="fas fa-trash"></i> Xóa
+                                </a>
+                            </td>
                         </tr>
                     }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="text-muted p-4">Hiện tại bảng dữ liệu người dùng trống.</td>
+                    </tr>
                 }
             </tbody>
         </table>

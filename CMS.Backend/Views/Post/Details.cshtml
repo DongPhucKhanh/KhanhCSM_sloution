@@ -1,19 +1,16 @@
-﻿//Họ và tên: Đồng Phúc Khánh
-//    MSSV: 2123110051
-//    version: 1.0
-@model CMS.Data.Entities.Post
+﻿@model CMS.Data.Entities.Post
 
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <a href="/Post" class="btn btn-secondary btn-sm mb-3">← Quay lại danh sách</a>
+            <a asp-action="Index" class="btn btn-secondary btn-sm mb-3">← Quay lại danh sách</a>
             <div class="card shadow">
-                <img src="@Model.ImageUrl" class="card-img-top" alt="Cover Image">
+                <img src="@Model.ImageUrl" class="card-img-top" alt="Cover Image" style="max-height: 350px; object-fit: cover;">
                 <div class="card-body">
                     <h1 class="card-title text-danger fw-bold">@Model.Title</h1>
                     <p class="text-muted small">Ngày đăng: @Model.CreatedDate.ToString("dd/MM/yyyy HH:mm")</p>
                     <hr />
-                    <p class="card-text fs-5" style="line-height: 1.8;">@Model.Content</p>
+                    <p class="card-text fs-5" style="line-height: 1.8; white-space: pre-line;">@Model.Content</p>
                 </div>
             </div>
         </div>

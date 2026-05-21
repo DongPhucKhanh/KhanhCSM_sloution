@@ -1,0 +1,43 @@
+﻿@model CMS.Data.Entities.Post
+
+<h2 class="text-warning my-3">CHỈNH SỬA BÀI VIẾT</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CategoryId" />
+            <input type="hidden" asp-for="CreatedDate" />
+            <input type="hidden" asp-for="ImageUrl" />
+
+            <div class="form-group mb-3">
+                <label class="form-label fw-bold">Tiêu đề bài viết</label>
+                <input asp-for="Title" class="form-control" required />
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label fw-bold">Thay đổi hình ảnh mới (Bỏ trống nếu giữ nguyên)</label>
+                <input type="file" name="imageFile" class="form-control" accept="image/*" />
+
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <div class="mt-2">
+                        <span class="small text-muted d-block mb-1">Ảnh hiện tại của bài viết:</span>
+                        <img src="@Model.ImageUrl" alt="Current Image" class="img-thumbnail" style="max-height: 120px;" />
+                    </div>
+                }
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="form-label fw-bold">Nội dung bài viết</label>
+                <textarea asp-for="Content" class="form-control" rows="6" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-warning text-dark">Cập nhật bài viết</button>
+                <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+            </div>
+        </form>
+    </div>
+</div>

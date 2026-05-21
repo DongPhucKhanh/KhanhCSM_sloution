@@ -4,52 +4,285 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CMS.Backend</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CMS.Backend.styles.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+    <style>
+        body {
+            overflow-x: hidden;
+            background-color: #f4f6f9;
+        }
+
+        #wrapper {
+            display: flex;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        /* --- STYLE THANH MENU BÊN TRÁI (SIDEBAR) --- */
+        #sidebar {
+            min-width: 250px;
+            max-width: 250px;
+            background: #222d32; /* Tông màu tối theo mẫu */
+            color: #b8c7ce;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        #sidebar.active {
+            margin-left: -250px;
+        }
+
+        /* Header thương hiệu */
+        #sidebar .sidebar-header {
+            padding: 15px;
+            background: #1a2226;
+            text-align: center;
+            border-bottom: 1px solid #1a2226;
+        }
+        #sidebar .sidebar-header h3 {
+            color: #fff;
+            font-size: 1.15rem;
+            margin: 0;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        /* Khu vực thông tin User Profile */
+        #sidebar .user-panel {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            background: #1a2226;
+            border-bottom: 1px solid #2c3b41;
+        }
+        #sidebar .user-panel img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 12px;
+            border: 1px solid #fff;
+        }
+        #sidebar .user-panel .info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+        #sidebar .user-panel .info p {
+            margin: 0 0 4px 0;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        #sidebar .user-panel .info span {
+            font-size: 0.75rem;
+            color: #b8c7ce;
+        }
+        #sidebar .user-panel .status-online {
+            color: #3c763d;
+            font-size: 0.65rem;
+            margin-right: 4px;
+        }
+
+        /* Danh mục Section dạng chữ in hoa nhỏ */
+        #sidebar .section-header {
+            padding: 12px 15px 6px 15px;
+            font-size: 0.75rem;
+            color: #4b646f;
+            background: #1a2226;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Các mục Menu liên kết */
+        #sidebar ul.components {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            flex-grow: 1;
+        }
+        #sidebar ul li a {
+            padding: 12px 15px;
+            font-size: 0.9rem;
+            display: block;
+            color: #b8c7ce;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+        #sidebar ul li a:hover {
+            color: #fff;
+            background: #1e282c;
+            border-left-color: #3c8dbc; /* Thanh màu xanh dọc khi hover */
+        }
+        #sidebar ul li a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        /* Mục đăng xuất cuối cùng */
+        #sidebar .logout-link {
+            background: #1a2226;
+            border-top: 1px solid #2c3b41;
+        }
+        #sidebar .logout-link a {
+            color: #dd4b39;
+        }
+        #sidebar .logout-link a:hover {
+            background: #dd4b39;
+            color: #fff;
+        }
+
+        /* --- STYLE PHẦN HIỂN THỊ NỘI DUNG (CONTENT) --- */
+        #content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Thanh Navbar trên cùng */
+        #content .top-navbar {
+            padding: 10px 15px;
+            background: #fff;
+            border-bottom: 1px solid #d2d6de;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Vùng nội dung Render Body */
+        #content .main-content {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        /* Thanh Footer */
+        #content footer {
+            padding: 15px 20px;
+            background: #fff;
+            border-top: 1px solid #d2d6de;
+            font-size: 0.9rem;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CMS.Backend</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+
+    <div id="wrapper">
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>CMS TIN TỨC</h3>
+            </div>
+
+
+            <div class="section-header">Quản trị hệ thống</div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a asp-controller="Home" asp-action="Index">
+                        <i class="fas fa-home"></i> Trang chủ
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Product" asp-action="Index">
+                        <i class="fas fa-cube"></i> Quản lý sản phẩm
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="CategoriesProducts" asp-action="Index">
+                        <i class="fas fa-boxes"></i> Danh mục sản phẩm
+                    </a>
+                </li>
+                
+                <li>
+                    <a asp-controller="Category" asp-action="Index">
+                        <i class="fas fa-list"></i> Danh mục bài viết 
+
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Post" asp-action="Index">
+                        <i class="fas fa-edit"></i> Quản lý bài viết
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="User" asp-action="Index">
+                        <i class="fas fa-users"></i> Quản lý người dùng
+                    </a>
+                </li>
+            
+            </ul>
+
+            <ul class="list-unstyled mb-0">
+                <li class="logout-link">
+                    <a href="#">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất hệ thống
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div id="content">
+            <div class="top-navbar">
+                <button type="button" id="sidebarCollapse" class="btn btn-dark btn-sm">
+                    <i class="fas fa-bars"></i>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Post" asp-action="Index">Bài Viết</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Người Dùng</a>
-                        </li>
+
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle btn-sm fw-bold" type="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-shield me-1"></i> Chào, Administrator
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
+                        <li><a class="dropdown-item" href="#">Hồ sơ cá nhân</a></li>
+                        <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#">Đăng xuất</a></li>
                     </ul>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+            <div class="main-content">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+
+            <footer class="text-muted">
+                <div class="container-fluid d-flex justify-content-between p-0">
+                    <span>&copy; 2026 - CMS.Backend - <a asp-controller="Home" asp-action="Privacy">Privacy</a></span>
+                    <span>Lập trình ASP.NET Core - Đồng Phúc Khánh</span>
+                </div>
+            </footer>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - CMS.Backend - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var btnCollapse = document.getElementById('sidebarCollapse');
+            var sidebar = document.getElementById('sidebar');
+
+            btnCollapse.addEventListener('click', function () {
+                sidebar.classList.toggle('active');
+            });
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
