@@ -1,0 +1,64 @@
+﻿@model IEnumerable<CMS.Data.Entities.Customer>
+
+@{
+    ViewData["Title"] = "Quản lý khách hàng";
+}
+
+<div class="card shadow-sm mt-3">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h4 class="text-primary fw-bold m-0">
+            <i class="fas fa-users me-2"></i>QUẢN LÝ DANH SÁCH KHÁCH HÀNG
+        </h4>
+        <a asp-action="Create" class="btn btn-primary btn-sm fw-bold">
+            <i class="fas fa-user-plus me-1"></i>THÊM KHÁCH HÀNG MỚI
+        </a>
+    </div>
+
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0 align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 80px;">ID</th>
+                    <th class="text-start">Họ và tên</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
+                    <th class="text-start">Địa chỉ</th>
+                    <th style="width: 150px;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold text-secondary">@item.Id</td>
+                            <td class="text-start fw-bold text-dark">@item.FullName</td>
+                            <td>@item.Email</td>
+                            <td>@item.Phone</td>
+                            <td class="text-start text-muted text-truncate" style="max-width: 200px;">@item.Address</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm border-0 me-1">
+                                    <i class="fas fa-user-edit"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm border-0"
+                                   onclick="return confirm('Bạn có chắc chắn muốn xóa khách hàng này không?')">
+                                    <i class="fas fa-user-times"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-muted p-4">
+                            <i class="fas fa-users-slash fa-2x d-block mb-2"></i>
+                            Chưa có dữ liệu khách hàng nào trong hệ thống.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

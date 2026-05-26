@@ -1,0 +1,46 @@
+﻿@model CMS.Data.Entities.Customer
+
+@{
+    ViewData["Title"] = "Thêm khách hàng";
+}
+
+<h2 class="text-primary my-3 fw-bold">THÊM KHÁCH HÀNG MỚI</h2>
+<hr />
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Create">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Họ và tên</label>
+                    <input asp-for="FullName" class="form-control" placeholder="Nhập họ tên khách hàng..." required />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Số điện thoại</label>
+                    <input asp-for="Phone" class="form-control" placeholder="Nhập số điện thoại..." required />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Email</label>
+                    <input asp-for="Email" type="email" class="form-control" placeholder="Nhập địa chỉ email..." required />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Mật khẩu (Đăng nhập App)</label>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Nhập mật khẩu..." required />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Địa chỉ</label>
+                <input asp-for="Address" class="form-control" placeholder="Nhập địa chỉ thường trú..." />
+            </div>
+
+            <div class="mt-3 border-top pt-3">
+                <button type="submit" class="btn btn-primary px-4 fw-bold">Lưu thông tin</button>
+                <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+            </div>
+        </form>
+    </div>
+</div>

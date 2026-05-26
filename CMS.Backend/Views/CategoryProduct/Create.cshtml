@@ -1,0 +1,38 @@
+﻿@model CMS.Data.Entities.CategoryProduct
+
+@{
+    ViewData["Title"] = "Thêm danh mục sản phẩm";
+}
+
+<h2 class="text-success my-3 fw-bold">THÊM DANH MỤC SẢN PHẨM MỚI</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form asp-action="Create">
+
+                    <div class="form-group mb-3">
+                        <label class="form-label fw-bold">Tên danh mục sản phẩm</label>
+                        <input asp-for="Name" class="form-control" placeholder="Ví dụ: Điện thoại, Laptop, Phụ kiện..." required />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label fw-bold">Mô tả danh mục</label>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Nhập mô tả ngắn cho danh mục này..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <button type="submit" class="btn btn-primary fw-bold px-4">
+                            <i class="fas fa-save me-1"></i> Lưu danh mục
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

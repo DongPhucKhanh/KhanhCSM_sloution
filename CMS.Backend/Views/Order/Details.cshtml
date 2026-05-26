@@ -1,0 +1,65 @@
+﻿@model CMS.Data.Entities.Order
+
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+    decimal totalOrderPrice = 0;
+}
+
+<h2 class="text-primary my-3 fw-bold">CHI TIẾT ĐƠN HÀNG #@Model.Id</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-dark text-white fw-bold">THÔNG TIN KHÁCH HÀNG</div>
+            <div class="card-body">
+                <p><strong>Họ và tên:</strong> @(Model.Customer != null ? Model.Customer.FullName : "N/A")</p>
+                <p><strong>Số điện thoại:</strong> @(Model.Customer != null ? Model.Customer.Phone : "N/A")</p>
+                <p><strong>Email:</strong> @(Model.Customer != null ? Model.Customer.Email : "N/A")</p>
+                <p><strong>Địa chỉ:</strong> @(Model.Customer != null ? Model.Customer.Address : "N/A")</p>
+                <p><strong>Ghi chú đơn:</strong> <span class="text-muted">@Model.Notes</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-primary text-white fw-bold">DANH SÁCH MẶT HÀNG</div>
+            <div class="card-body p-0">
+                <table class="table table-striped mb-0 align-middle text-center">
+                    <thead>
+                        <tr>
+                            <th class="text-start ps-3">Tên sản phẩm</th>
+                            <th>Giá bán</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.OrderDetails != null && Model.OrderDetails.Any())
+                        {
+                            foreach (var detail in Model.OrderDetails)
+                            {
+                                decimal itemTotal = detail.Quantity * detail.UnitPrice;
+                                totalOrderPrice += itemTotal;
+                                <tr>
+                                    <td class="text-start ps-3 fw-bold">@(detail.Product != null ? detail.Product.Name : "Sản phẩm đã bị xóa")</td>
+                                    <td>@detail.UnitPrice.ToString("N0") Đ</td>
+                                    <td>@detail.Quantity</td>
+                                    <td class="text-danger fw-bold">@itemTotal.ToString("N0") Đ</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer bg-light text-end py-3">
+                <h5 class="m-0 fw-bold">TỔNG GIÁ TRỊ ĐƠN HÀNG: <span class="text-danger">@totalOrderPrice.ToString("N0") VNĐ</span></h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-2">
+    <a asp-action="Index" class="btn btn-secondary px-4">Quay lại danh sách</a>
+</div>
