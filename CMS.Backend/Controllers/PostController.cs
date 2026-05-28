@@ -55,11 +55,12 @@ namespace CMS.Backend.Controllers
         // 3. XỬ LÝ LƯU BÀI VIẾT MỚI VÀ UPLOAD FILE (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Post model, IFormFile ImageFile)
+        public async Task<IActionResult> Create(Post model, IFormFile? ImageFile)
         {
-            // GIẢI QUYẾT TẬN GỐC LỖI KẸT FORM: Gỡ bỏ kiểm tra tự động trường liên kết ảo và trường đường dẫn chuỗi
+            // GIẢI QUYẾT TẬN GỐC LỖI KẸT FORM: Gỡ bỏ kiểm tra tự động các trường liên kết ảo và trường file
             ModelState.Remove("Category");
             ModelState.Remove("ImageUrl");
+            ModelState.Remove("ImageFile");
 
             if (ModelState.IsValid)
             {
@@ -117,11 +118,12 @@ namespace CMS.Backend.Controllers
         // 4. XỬ LÝ CẬP NHẬT BÀI VIẾT VÀ ĐỔI FILE ẢNH (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Post model, IFormFile ImageFile)
+        public async Task<IActionResult> Edit(int id, Post model, IFormFile? ImageFile)
         {
             if (id != model.Id) return NotFound();
 
-            // Gỡ bỏ kiểm tra ràng buộc trường liên kết ảo tương tự hành động Thêm mới
+            // SỬA LỖI KẸT ẢNH: Gỡ bỏ hoàn toàn kiểm tra lỗi validation của ImageFile và các trường liên kết ảo
+            ModelState.Remove("ImageFile");
             ModelState.Remove("Category");
             ModelState.Remove("ImageUrl");
 
@@ -153,7 +155,7 @@ namespace CMS.Backend.Controllers
                     }
                     else
                     {
-                        // ĐỒNG BỘ LOGIC: Ép lấy lại đường dẫn ảnh cũ chính xác từ DB gốc phòng hờ thẻ hidden đẩy chuỗi sai
+                        // ĐỒNG BỘ LOGIC: Ép lấy lại đường dẫn ảnh cũ chính xác từ DB gốc phòng hờ lỗi trống dữ liệu đầu vào
                         model.ImageUrl = existingPost.ImageUrl;
                     }
 
