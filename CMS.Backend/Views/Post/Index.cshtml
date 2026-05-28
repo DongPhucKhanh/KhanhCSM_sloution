@@ -1,27 +1,66 @@
-﻿//Họ và tên: Đồng Phúc Khánh
-//    MSSV: 2123110051
-//    version: 1.0
-@model IEnumerable<CMS.Data.Entities.Post>
+﻿@model IEnumerable<CMS.Data.Entities.Post>
+@{
+    ViewData["Title"] = "Quản lý bài viết";
+}
 
-<div class="container mt-4">
-    <h2 class="mb-4 text-danger text-center fw-bold">DANH SÁCH BÀI VIẾT MỚI NHẤT</h2>
-    <div class="row">
-        @if (Model != null)
-        {
-            foreach (var item in Model)
-            {
-                <div class="col-md-4 mb-3">
-                    <div class="card shadow-sm h-100">
-                        <img src="@item.ImageUrl" class="card-img-top" alt="Thumbnail">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title text-primary fw-bold">@item.Title</h5>
-                            <p class="card-text text-truncate">@item.Content</p>
-                            <p class="text-muted small mt-auto">Ngày đăng: @item.CreatedDate.ToString("dd/MM/yyyy")</p>
-                            <a href="/Post/Details/@item.Id" class="btn btn-outline-primary btn-sm mt-2">Xem chi tiết</a>
-                        </div>
-                    </div>
-                </div>
-            }
-        }
+<div class="card shadow-sm mt-3">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h4 class="text-dark fw-bold m-0">
+            <i class="fas fa-edit me-2 text-primary"></i>QUẢN LÝ BÀI VIẾT
+        </h4>
+        <a asp-action="Create" class="btn btn-success btn-sm fw-bold">
+            <i class="fas fa-plus-circle me-1"></i>VIẾT BÀI MỚI
+        </a>
+    </div>
+
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0 align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 70px;">ID</th>
+                    <th style="width: 120px;">Hình ảnh</th>
+                    <th class="text-start">Tiêu đề bài viết</th>
+                    <th>Danh mục bài viết</th>
+                    <th>Ngày đăng</th>
+                    <th style="width: 180px;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>
+                                <img src="@item.ImageUrl" alt="thumb" class="img-thumbnail" style="max-height: 50px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/150'" />
+                            </td>
+                            <td class="text-start">
+                                <strong>@item.Title</strong>
+                            </td>
+                            <td>
+                                <span class="badge bg-info text-dark">@(item.Category?.Name ?? "Không rõ danh mục")</span>
+                            </td>
+                            <td>@item.CreatedDate.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm me-1">
+                                    <i class="fas fa-edit"></i> Sửa
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm"
+                                   onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này không?')">
+                                    <i class="fas fa-trash-alt"></i> Xóa
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-muted p-4">Hiện tại chưa có bài viết nào trong CSDL.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>

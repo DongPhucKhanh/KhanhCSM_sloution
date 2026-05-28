@@ -1,0 +1,65 @@
+﻿@model CMS.Data.Entities.User
+@{
+    ViewData["Title"] = "Thêm thành viên";
+}
+
+<h2 class="text-primary my-3 fw-bold">THÊM THÀNH VIÊN MỚI</h2>
+<hr />
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Tên đăng nhập (Username)</label>
+                    <input asp-for="Username" class="form-control" placeholder="Nhập tên tài khoản..." />
+                    <span asp-validation-for="Username" class="text-danger small fw-bold"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Mật khẩu đăng nhập (Mật khẩu thô)</label>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Nhập mật khẩu..." />
+                    <span asp-validation-for="Password" class="text-danger small fw-bold"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Họ và Tên</label>
+                    <input asp-for="FullName" class="form-control" placeholder="Nhập họ tên đầy đủ..." />
+                    <span asp-validation-for="FullName" class="text-danger small fw-bold"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Địa chỉ Email</label>
+                    <input asp-for="Email" class="form-control" placeholder="example@gmail.com" />
+                    <span asp-validation-for="Email" class="text-danger small fw-bold"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Vai trò (Role)</label>
+                    <select asp-for="Role" class="form-select">
+                        <option value="">-- Chọn quyền hạn --</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Editor">Editor</option>
+                    </select>
+                    <span asp-validation-for="Role" class="text-danger small fw-bold"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Trạng thái kích hoạt</label>
+                    <div class="form-check form-switch mt-2">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" checked />
+                        <label class="form-check-label text-muted">Cho phép hoạt động ngay</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3 border-top pt-3">
+                <button type="submit" class="btn btn-primary px-4 fw-bold">Lưu thành viên</button>
+                <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+            </div>
+        </form>
+    </div>
+</div>
