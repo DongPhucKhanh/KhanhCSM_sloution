@@ -28,12 +28,15 @@ builder.Services.AddControllersWithViews(); // Lệnh giữ quyền biên dịch
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(); // Kích hoạt bộ sinh tài liệu API Swagger
 
-// Đăng ký chính sách CORS để bật đèn xanh cho ReactJS kết nối ở các buổi sau
-builder.Services.AddCors(options => {
-    options.AddPolicy("AllowAll", policy => {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+// ---- CẤU HÌNH CORS (THÊM VÀO TRƯỚC builder.Build()) ----
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000") // Cho phép ReactJS ở port 3000 gọi tới
+              .AllowAnyHeader()                     // Cho phép mọi loại Header (Content-Type, Authorization...)
+              .AllowAnyMethod()                     // Cho phép mọi phương thức HTTP (GET, POST, PUT, DELETE)
+              .AllowCredentials();                  // Hỗ trợ truyền Cookie/Session nếu cần sau này
     });
 });
 
@@ -62,10 +65,10 @@ app.UseStaticFiles();
 app.UseRouting();
 
 // ==============================================================
-// KÍCH HOẠT MIDDLEWARE CORS CỦA BUỔI 6 (BẮT BUỘC ĐẶT ĐÚNG VỊ TRÍ)
+// KÍCH HOẠT MIDDLEWARE CORS CỦA BUỔI 7 (BẮT BUỘC ĐẶT ĐÚNG VỊ TRÍ)
 // Khớp quy tắc chuyên đề: Nằm ngay giữa UseRouting và app.UseAuthentication()
 // ==============================================================
-app.UseCors("AllowAll");
+app.UseCors("AllowReactApp");
 
 // 3. CẬP NHẬT BUỔI 5: Kích hoạt Middleware xác thực (Bắt buộc đứng trước Authorization)
 app.UseAuthentication(); // Xác nhận danh tính người dùng (Anh là ai?)
