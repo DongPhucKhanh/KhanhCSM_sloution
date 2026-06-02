@@ -1,6 +1,10 @@
-﻿import React from 'react';
+﻿// Họ và tên: Đồng Phúc Khánh - MSSV: 2123110051
+// Chức năng: Giao diện tổng thể hoàn thiện Buổi 7 - Tích hợp Real-time Sản phẩm và Blog Tin tức
+import React from 'react';
 import CategoryProductList from './components/CategoryProductList';
-import './App.css'; // File chứa các style tùy biến riêng của dự án
+import ProductList from './components/ProductList';
+import PostList from './components/PostList'; // BỔ SUNG: Import component Tin tức vào đây
+import './App.css';
 
 function App() {
     return (
@@ -8,22 +12,26 @@ function App() {
             {/* Phần Header của Website */}
             <header className="pb-3 mb-4 border-bottom">
                 <span className="fs-4 font-weight-bold text-dark text-uppercase">
-                    🛒 HỆ THỐNG CỬA HÀNG TRỰC TUYẾN - THAICMS RETAIL
+                    🛒 HỆ THỐNG CỬA HÀNG TRỰC TUYẾN - KHANHCMS RETAIL
                 </span>
             </header>
 
             <div className="row">
-                {/* Cột bên trái (Chức năng Sidebar): Hiển thị bộ lọc danh mục sản phẩm */}
+                {/* Cột bên trái (Sidebar): Bộ lọc danh mục sản phẩm */}
                 <div className="col-md-3">
                     <CategoryProductList />
                 </div>
 
-                {/* Cột bên phải (Chức năng Content): Dùng để hiển thị danh sách sản phẩm ở các bài học tiếp theo */}
+                {/* Cột bên phải (Main Content): Hiển thị đồng thời Sản phẩm và Xu hướng phối đồ */}
                 <div className="col-md-9">
-                    <div className="jumbotron bg-light border p-5 rounded-lg">
-                        <h1 className="display-4 font-weight-bold text-primary">Chào mừng quay trở lại!</h1>
-                        <p className="lead text-muted">Khu vực hiển thị danh sách sản phẩm thời trang sẽ được kết nối ở Buổi 8.</p>
-                    </div>
+                    {/* KHU VỰC 1: SẢN PHẨM THỜI TRANG */}
+                    <h4 className="mb-4 text-uppercase text-secondary font-weight-bold">
+                        <i className="fa-solid fa-shirt text-success mr-2"></i>Bộ sưu tập mới nhất
+                    </h4>
+                    <ProductList />
+
+                    {/* KHU VỰC 2: BLOG & TIN TỨC (BỔ SUNG ĐỂ HOÀN THÀNH 100% BUỔI 7) */}
+                    <PostList />
                 </div>
             </div>
         </div>
