@@ -9,19 +9,17 @@
 
 <div class="card shadow-sm border-0 rounded-lg">
     <div class="card-body p-4 bg-white">
-        <form asp-action="Edit">
-            <!-- Khóa chính ẩn để cập nhật đúng bản ghi -->
+        <form asp-action="Edit" enctype="multipart/form-data">
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ImageUrl" />
 
             <div class="row">
-                <!-- Tên sản phẩm linh kiện -->
                 <div class="col-md-6 mb-3">
                     <label class="form-label fw-bold">Tên linh kiện / Đồ chơi</label>
                     <input asp-for="Name" class="form-control" required />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
 
-                <!-- Mã danh mục phân loại ô tô -->
                 <div class="col-md-6 mb-3">
                     <label class="form-label fw-bold">Mã nhóm danh mục (ID)</label>
                     <input asp-for="CategoryProductId" type="number" class="form-control" required />
@@ -30,14 +28,12 @@
             </div>
 
             <div class="row">
-                <!-- Giá bán sản phẩm -->
                 <div class="col-md-6 mb-3">
                     <label class="form-label fw-bold">Giá bán (VNĐ)</label>
                     <input asp-for="Price" type="number" class="form-control" required />
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
 
-                <!-- Số lượng tồn kho -->
                 <div class="col-md-6 mb-3">
                     <label class="form-label fw-bold">Số lượng tồn kho</label>
                     <input asp-for="StockQuantity" type="number" class="form-control" required />
@@ -45,38 +41,34 @@
                 </div>
             </div>
 
-            <!-- PHẦN CHỈNH SỬA HÌNH ẢNH SẢN PHẨM (Đã đưa ra ngoài dạng Textbox để nhập đường dẫn) -->
             <div class="row align-items-center mb-3">
                 <div class="col-md-8">
-                    <label class="form-label fw-bold">Đường dẫn hình ảnh sản phẩm</label>
-                    <input asp-for="ImageUrl" class="form-control" placeholder="Ví dụ: /uploads/vietmap-dq8.jpg" required />
-                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                    <label class="form-label fw-bold">Chọn hình ảnh từ máy tính</label>
+                    <input type="file" name="ImageFile" class="form-control" accept="image/*" />
+                    <small class="text-muted d-block mt-1">Nếu không chọn ảnh mới, hệ thống sẽ giữ nguyên hình ảnh cũ đang dùng.</small>
                 </div>
 
-                <!-- Khung hiển thị ảnh xem trước trực quan -->
                 <div class="col-md-4 text-center mt-3 mt-md-0">
-                    <label class="form-label fw-bold d-block text-secondary small">Ảnh xem trước</label>
+                    <label class="form-label fw-bold d-block text-secondary small">Ảnh hiện tại</label>
                     @if (!string.IsNullOrEmpty(Model.ImageUrl))
                     {
-                        <img src="@Model.ImageUrl" alt="Preview" class="img-thumbnail shadow-sm" style="max-height: 90px; object-fit: cover;" />
+                        <img src="@Model.ImageUrl" alt="Preview" class="img-thumbnail shadow-sm" style="max-height: 100px; object-fit: cover;" />
                     }
                     else
                     {
-                        <div class="border rounded d-flex align-items-center justify-content-center bg-light text-muted small" style="height: 90px;">
+                        <div class="border rounded d-flex align-items-center justify-content-center bg-light text-muted small" style="height: 100px;">
                             Chưa có ảnh
                         </div>
                     }
                 </div>
             </div>
 
-            <!-- Mô tả thông số kỹ thuật sản phẩm -->
             <div class="mb-3">
                 <label class="form-label fw-bold">Thông số kỹ thuật / Mô tả sản phẩm</label>
                 <textarea asp-for="Description" class="form-control" rows="4"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
-            <!-- Cụm nút lệnh thao tác điều hướng -->
             <div class="mt-4 border-top pt-3">
                 <button type="submit" class="btn btn-warning px-4 fw-bold text-dark rounded-pill">
                     <i class="fas fa-save me-1"></i> Lưu lại thay đổi

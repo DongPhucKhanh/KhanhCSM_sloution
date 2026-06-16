@@ -53,6 +53,7 @@ namespace CMS.Backend.Controllers
         // BƯỚC 2: VIẾT HÀM LẤY BÀI VIẾT THEO CHUYÊN MỤC TIN TỨC
         // ==============================================================
         // Định nghĩa đường dẫn chứa tham số động: api/posts/category/{categoryId}
+        // BƯỚC 2: VIẾT HÀM LẤY BÀI VIẾT THEO CHUYÊN MỤC TIN TỨC
         [HttpGet("category/{categoryId}")]
         public async Task<IActionResult> GetByCategory(int categoryId)
         {
@@ -63,7 +64,9 @@ namespace CMS.Backend.Controllers
                     p.Id,
                     p.Title,
                     p.ImageUrl,
-                    p.CreatedDate
+                    p.CreatedDate,
+                    p.Content,
+                    CategoryName = p.Category.Name // BỔ SUNG: Kéo thêm tên danh mục để hiện thẻ tag màu đỏ
                 })
                 .ToListAsync();
 
