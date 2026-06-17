@@ -1,21 +1,35 @@
 ﻿// Họ và tên: Đồng Phúc Khánh - MSSV: 2123110051
-// Chức năng: Giao diện chuẩn Classic E-Commerce Ô tô (Tích hợp Layout Switching và Full Sticky Header)
-import React, { useState } from 'react';
+// Chức năng: Giao diện chuẩn Classic E-Commerce Ô tô (Tích hợp Xác thực Khách hàng và Giỏ hàng toàn cục)
+import React, { useState, useContext } from 'react'; // 🔥 BỔ SUNG: Import thêm useContext
 import CategoryProductList from './components/CategoryProductList';
 import ProductList from './components/ProductList';
 import PostList from './components/PostList';
 import BlogCategoryList from './components/BlogCategoryList';
 import PostDetail from './components/PostDetail';
 import ProductDetail from './components/ProductDetail';
+import Login from './components/Login';
+import Register from './components/Register';
+// 🔥 BỔ SUNG 1: Import Cart và CartContext
+import Cart from './components/Cart';
+import { CartContext } from './context/CartContext';
 import './App.css';
 
 function App() {
+    // 🔥 BỔ SUNG 2: Rút trích số liệu tính toán từ Giỏ hàng
+    const { cartCount, cartTotal } = useContext(CartContext);
+
     const [currentView, setCurrentView] = useState('home');
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
     const [selectedBlogCategoryId, setSelectedBlogCategoryId] = useState(null);
     const [viewingPostId, setViewingPostId] = useState(null);
     const [viewingProductId, setViewingProductId] = useState(null);
 
+    const [loggedInUser, setLoggedInUser] = useState(() => {
+        const saved = localStorage.getItem('currentUser');
+        return saved ? JSON.parse(saved) : null;
+    });
+
+    // --- CÁC HÀM ĐIỀU HƯỚNG ---
     const goToHome = () => {
         setCurrentView('home');
         setViewingProductId(null);
@@ -50,7 +64,7 @@ function App() {
     return (
         <div className="ecommerce-store bg-light" style={{ minHeight: '100vh' }}>
 
-            {/* 🔥 BỔ SUNG: KHU VỰC GOM NHÓM HEADER STICKY (Giữ cố định toàn bộ 3 thanh khi cuộn) */}
+            {/* KHU VỰC GOM NHÓM HEADER STICKY */}
             <div className="sticky-top shadow-sm" style={{ zIndex: 1050 }}>
 
                 {/* ================= 1. TOP BAR ================= */}
@@ -61,17 +75,35 @@ function App() {
                             <span className="mx-3">|</span>
                             <i className="fa-solid fa-envelope mr-2"></i> Email: hotro@khanhcms.com
                         </div>
+
                         <div>
-                            <span className="cursor-pointer hover-text-danger">Đăng nhập</span>
-                            <span className="mx-2">/</span>
-                            <span className="cursor-pointer hover-text-danger">Đăng ký</span>
+                            {loggedInUser ? (
+                                <>
+                                    <span className="text-light mr-2">Chào, <strong className="text-danger">{loggedInUser.fullName}</strong></span>
+                                    <span className="mx-2">|</span>
+                                    <span className="cursor-pointer text-muted hover-text-danger small" onClick={() => {
+                                        localStorage.removeItem('currentUser');
+                                        setLoggedInUser(null);
+                                        goToHome();
+                                    }}>Đăng xuất</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span className="cursor-pointer hover-text-danger" onClick={() => setCurrentView('login')}>Đăng nhập</span>
+                                    <span className="mx-2">/</span>
+                                    <span className="cursor-pointer hover-text-danger" onClick={() => setCurrentView('register')}>Đăng ký</span>
+                                </>
+                            )}
                             <span className="mx-2">|</span>
-                            <span className="cursor-pointer text-danger font-weight-bold"><i className="fa-solid fa-cart-shopping mr-1"></i> Giỏ hàng (3)</span>
+                            {/* 🔥 BỔ SUNG 3: Thay số tĩnh bằng biến cartCount động và gắn link mở Trang giỏ hàng */}
+                            <span className="cursor-pointer text-danger font-weight-bold" onClick={() => setCurrentView('cart')}>
+                                <i className="fa-solid fa-cart-shopping mr-1"></i> Giỏ hàng ({cartCount})
+                            </span>
                         </div>
                     </div>
                 </div>
 
-                {/* ================= 2. HEADER ================= */}
+                {/* ================= 2. HEADER TÌM KIẾM ================= */}
                 <header className="bg-white py-3 d-none d-lg-block">
                     <div className="container-fluid px-xl-5 d-flex justify-content-between align-items-center">
                         <div className="d-flex align-items-center cursor-pointer" onClick={goToHome}>
@@ -88,18 +120,26 @@ function App() {
                             </div>
                         </div>
 
-                        <div className="d-flex align-items-center cursor-pointer p-2 border rounded bg-light hover-shadow">
-                            <i className="fa-solid fa-cart-shopping fa-2xl text-danger mr-3"></i>
+                        {/* 🔥 BỔ SUNG 4: Cập nhật Cục hiển thị Giỏ hàng siêu to khổng lồ */}
+                        <div className="d-flex align-items-center cursor-pointer p-2 border rounded bg-light hover-shadow" onClick={() => setCurrentView('cart')}>
+                            <div className="position-relative">
+                                <i className="fa-solid fa-cart-shopping fa-2xl text-danger mr-3"></i>
+                                {cartCount > 0 && (
+                                    <span className="position-absolute badge badge-pill badge-warning border border-white" style={{ top: '-10px', right: '5px', fontSize: '0.75rem' }}>
+                                        {cartCount}
+                                    </span>
+                                )}
+                            </div>
                             <div>
                                 <span className="d-block small text-muted font-weight-bold">Giỏ hàng của bạn</span>
-                                <span className="font-weight-bold text-dark">0 VNĐ</span>
+                                <span className="font-weight-bold text-dark">{cartTotal.toLocaleString('vi-VN')} đ</span>
                             </div>
                         </div>
+
                     </div>
                 </header>
 
                 {/* ================= 3. NAVBAR ĐỎ ================= */}
-                
                 <nav className="navbar navbar-expand-lg navbar-dark custom-red-navbar py-0">
                     <div className="container-fluid px-xl-5">
                         <button className="navbar-toggler my-2 border-0" type="button" data-toggle="collapse" data-target="#mainNav">
@@ -124,6 +164,36 @@ function App() {
             {/* Kết thúc khu vực Header Sticky */}
 
             {/* ================= 4. KHU VỰC THAY ĐỔI LAYOUT ĐỘNG ================= */}
+
+            {/* LUỒNG AUTH: TRANG ĐĂNG NHẬP / ĐĂNG KÝ */}
+            {(currentView === 'login' || currentView === 'register') && (
+                <div className="container my-5 py-5">
+                    <div className="row justify-content-center">
+                        <div className="col-md-5 bg-white p-4 shadow-lg border rounded">
+                            {currentView === 'login' ? (
+                                <Login
+                                    onSwitchToRegister={() => setCurrentView('register')}
+                                    onLoginSuccess={(user) => {
+                                        setLoggedInUser(user);
+                                        goToHome();
+                                    }}
+                                />
+                            ) : (
+                                <Register onSwitchToLogin={() => setCurrentView('login')} />
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* 🔥 BỔ SUNG 5: LUỒNG CART (TRANG GIỎ HÀNG) */}
+            {currentView === 'cart' && (
+                <Cart
+                    onContinueShopping={goToProducts}
+                    onCheckout={() => alert("Hệ thống sẽ chuyển tiếp sang trang Thanh toán Đơn hàng!")}
+                />
+            )}
+
 
             {/* LƯỚNG 1: TRANG CHỦ FULL-WIDTH (KHÔNG CÓ SIDEBAR) */}
             {currentView === 'home' && (

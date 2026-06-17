@@ -1,9 +1,14 @@
-﻿@model IEnumerable<CMS.Data.Entities.Post>
+﻿@* Họ và tên: Đồng Phúc Khánh - MSSV: 2123110051
+   Chức năng: Giao diện quản lý danh sách bài viết (Đã tích hợp giao diện Phân trang)
+*@
+@model IEnumerable<CMS.Data.Entities.Post>
 @{
+    // Thiết lập tiêu đề cho trang web (sẽ được chèn vào thẻ <title> ở Layout chính)
     ViewData["Title"] = "Quản lý bài viết";
 }
 
 <div class="card shadow-sm mt-3">
+
     <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
         <h4 class="text-dark fw-bold m-0">
             <i class="fas fa-edit me-2 text-primary"></i>QUẢN LÝ BÀI VIẾT
@@ -15,6 +20,7 @@
 
     <div class="card-body p-0">
         <table class="table table-hover mb-0 align-middle text-center">
+
             <thead class="table-dark">
                 <tr>
                     <th style="width: 70px;">ID</th>
@@ -25,23 +31,33 @@
                     <th style="width: 180px;">Thao tác</th>
                 </tr>
             </thead>
+
             <tbody>
+                @* Kiểm tra xem danh sách truyền từ Controller sang có dữ liệu hay không *@
                 @if (Model != null && Model.Any())
                 {
+                    // Vòng lặp foreach duyệt qua từng bài viết trong mảng dữ liệu
                     foreach (var item in Model)
                     {
                         <tr>
                             <td>@item.Id</td>
+
                             <td>
+                                @* Hiển thị ảnh, nếu lỗi không tải được thì dùng ảnh giả (onerror) *@
                                 <img src="@item.ImageUrl" alt="thumb" class="img-thumbnail" style="max-height: 50px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/150'" />
                             </td>
+
                             <td class="text-start">
                                 <strong>@item.Title</strong>
                             </td>
+
                             <td>
+                                @* Dùng toán tử ?? để phòng hờ lỗi NULL nếu bài viết không thuộc danh mục nào *@
                                 <span class="badge bg-info text-dark">@(item.Category?.Name ?? "Không rõ danh mục")</span>
                             </td>
+
                             <td>@item.CreatedDate.ToString("dd/MM/yyyy HH:mm")</td>
+
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm me-1">
                                     <i class="fas fa-edit"></i> Sửa
@@ -56,6 +72,7 @@
                 }
                 else
                 {
+                    // Nếu không có bài viết nào, in ra thông báo trống trải dài khắp 6 cột
                     <tr>
                         <td colspan="6" class="text-muted p-4">Hiện tại chưa có bài viết nào trong CSDL.</td>
                     </tr>
@@ -63,4 +80,35 @@
             </tbody>
         </table>
     </div>
+
+    @* Kiểm tra biến ViewBag.TotalPages (từ Controller truyền sang). Nếu tổng số trang > 1 thì mới hiện thanh bấm *@
+    @if (ViewBag.TotalPages > 1)
+    {
+        <div class="card-footer bg-white d-flex justify-content-end py-3">
+            <nav aria-label="Page navigation">
+                <ul class="pagination mb-0">
+
+                    <li class="page-item @(ViewBag.CurrentPage <= 1 ? "disabled" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1 })">
+                            <i class="fas fa-chevron-left me-1"></i> Trước
+                        </a>
+                    </li>
+
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                        </li>
+                    }
+
+                    <li class="page-item @(ViewBag.CurrentPage >= ViewBag.TotalPages ? "disabled" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1 })">
+                            Sau <i class="fas fa-chevron-right ms-1"></i>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+        </div>
+    }
 </div>
