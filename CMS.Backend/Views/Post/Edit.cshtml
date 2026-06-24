@@ -1,4 +1,4 @@
-﻿@model CMS.Data.Entities.Post
+@model CMS.Data.Entities.Post
 @{
     ViewData["Title"] = "Chỉnh sửa bài viết";
 }
@@ -49,7 +49,7 @@
                 <div class="col-md-9">
                     <label class="form-label fw-bold">Chọn file ảnh thay thế mới (Nếu muốn đổi)</label>
                     <input type="file" name="ImageFile" class="form-control" accept="image/*" />
-                    <small class="text-muted">Để trống ô này nếu Khoa muốn giữ nguyên ảnh đại diện cũ.</small>
+                    <small class="text-muted">Để trống ô này nếu muốn giữ nguyên ảnh đại diện cũ.</small>
                 </div>
                 <div class="col-md-3 text-center">
                     <label class="form-label d-block small text-muted fw-bold">Ảnh hiện tại</label>
@@ -58,8 +58,8 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label fw-bold">Nội dung chi tiết bài viết</label>
-                <textarea asp-for="Content" class="form-control" rows="8" required></textarea>
+                <label class="form-label fw-bold">Nội dung chi tiết bài viết <span class="badge bg-success">CKEditor 5</span></label>
+                <textarea asp-for="Content" id="ContentEditor" class="form-control" rows="10" required>@Model.Content</textarea>
                 <span asp-validation-for="Content" class="text-danger small fw-bold"></span>
             </div>
 
@@ -74,3 +74,42 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#ContentEditor'), {
+                simpleUpload: {
+                    uploadUrl: '/api/Upload/Image',
+                    withCredentials: true,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    }
+                },
+                toolbar: {
+                    items: [
+                        'heading', '|',
+                        'bold', 'italic', 'underline', 'strikethrough', '|',
+                        'link', 'uploadImage', 'insertTable', 'blockQuote', '|',
+                        'bulletedList', 'numberedList', 'outdent', 'indent', '|',
+                        'alignment', '|',
+                        'fontSize', 'fontColor', 'fontBackgroundColor', '|',
+                        'undo', 'redo'
+                    ]
+                },
+                language: 'vi'
+            })
+            .then(editor => {
+                editor.model.document.on('change:data', () => {
+                    document.querySelector('#ContentEditor').value = editor.getData();
+                });
+                document.querySelector('form').addEventListener('submit', () => {
+                    document.querySelector('#ContentEditor').value = editor.getData();
+                });
+            })
+            .catch(error => {
+                console.error('Lỗi khởi tạo CKEditor:', error);
+            });
+    </script>
+}

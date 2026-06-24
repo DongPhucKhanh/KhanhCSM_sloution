@@ -1,4 +1,4 @@
-﻿@model CMS.Data.Entities.Post
+@model CMS.Data.Entities.Post
 @{
     ViewData["Title"] = "Thêm bài viết mới";
 }
@@ -41,8 +41,8 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label fw-bold">Nội dung chi tiết bài viết</label>
-                <textarea asp-for="Content" class="form-control" rows="8" placeholder="Viết nội dung vào đây..." required></textarea>
+                <label class="form-label fw-bold">Nội dung chi tiết bài viết <span class="badge bg-success">CKEditor 5</span></label>
+                <textarea asp-for="Content" id="ContentEditor" class="form-control" rows="10" required></textarea>
                 <span asp-validation-for="Content" class="text-danger small"></span>
             </div>
 
@@ -53,3 +53,50 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <!-- Tải CKEditor 5 từ CDN -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+    <script>
+        // Khởi tạo CKEditor 5 trên textarea có id="ContentEditor"
+        ClassicEditor
+            .create(document.querySelector('#ContentEditor'), {
+                // Cấu hình upload ảnh trực tiếp qua Simple Upload Adapter
+                simpleUpload: {
+                    // Địa chỉ API backend nhận file ảnh
+                    uploadUrl: '/api/Upload/Image',
+                    // Gửi kèm cookie để xác thực [Authorize] ở backend
+                    withCredentials: true,
+                    headers: {
+                        // Gửi token chống giả mạo (CSRF) nếu cần
+                        'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    }
+                },
+                toolbar: {
+                    items: [
+                        'heading', '|',
+                        'bold', 'italic', 'underline', 'strikethrough', '|',
+                        'link', 'uploadImage', 'insertTable', 'blockQuote', '|',
+                        'bulletedList', 'numberedList', 'outdent', 'indent', '|',
+                        'alignment', '|',
+                        'fontSize', 'fontColor', 'fontBackgroundColor', '|',
+                        'undo', 'redo'
+                    ]
+                },
+                language: 'vi'
+            })
+            .then(editor => {
+                // Đồng bộ nội dung CKEditor vào textarea gốc khi submit form
+                editor.model.document.on('change:data', () => {
+                    document.querySelector('#ContentEditor').value = editor.getData();
+                });
+                // Trước khi submit: cập nhật lại một lần cuối
+                document.querySelector('form').addEventListener('submit', () => {
+                    document.querySelector('#ContentEditor').value = editor.getData();
+                });
+            })
+            .catch(error => {
+                console.error('Lỗi khởi tạo CKEditor:', error);
+            });
+    </script>
+}

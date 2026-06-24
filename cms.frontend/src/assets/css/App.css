@@ -1,0 +1,162 @@
+/* ---- BỘ CSS GIAO DIỆN CLASSIC E-COMMERCE (MÀU ĐỎ/TRẮNG/ĐEN) ---- */
+
+/* Màu đỏ đô đặc trưng của thanh Menu ô tô */
+.custom-red-navbar {
+    background-color: #b30000;
+    border-bottom: 3px solid #800000;
+}
+
+/* Các đường kẻ dọc mờ chia ô menu */
+.border-danger-light {
+    border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Hiệu ứng hover cho thanh Nav đỏ */
+.hover-nav:hover, .active-nav {
+    background-color: #800000;
+    transition: background-color 0.3s;
+}
+
+/* ẨN TIÊU ĐỀ COMPONENT CŨ ĐỂ DÙNG TIÊU ĐỀ MỚI CỦA SIDEBAR */
+.sidebar-content .modern-card {
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+    .sidebar-content .modern-card h6 {
+        display: none !important; /* Giấu chữ "Danh mục SP" và "Chủ đề bài viết" cũ đi */
+    }
+
+/* ĐỊNH DẠNG LẠI DANH SÁCH MENU BÊN TRÁI CHO GIỐNG MẪU BIGAUTO */
+.sidebar-content .list-group-item {
+    border: none;
+    border-bottom: 1px solid #eaeaea !important;
+    border-radius: 0 !important;
+    padding: 12px 18px !important;
+    font-weight: 600;
+    color: #333 !important;
+    background-color: #fff !important;
+}
+
+    /* Đổi màu khi hover chuột vào từng dòng danh mục */
+    .sidebar-content .list-group-item:hover,
+    .sidebar-content .list-group-item.active {
+        background-color: #f8f9fa !important;
+        color: #b30000 !important;
+        padding-left: 25px !important; /* Thụt vào 1 chút cho đẹp */
+    }
+
+/* Đẩy Banner ảnh qua bên phải (Cập nhật ảnh banner ô tô sang xịn) */
+.hero-banner {
+    background: url('https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=1200&auto=format&fit=crop') center center/cover no-repeat;
+    padding: 80px 0;
+    border-radius: 4px;
+}
+/* Custom Scrollbar cho Sidebar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #dee2e6;
+    border-radius: 10px;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: #b30000;
+}
+
+/* ========================================================================= */
+/* THIẾT KẾ TRANG CHỦ CHUYÊN NGHIỆP CỦA KHANHCMS */
+/* ========================================================================= */
+
+/* 1. Value Proposition Boxes */
+.value-box {
+    border: 1px solid #eaeaea;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+.value-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(179, 0, 0, 0.1) !important;
+    border-color: #b30000 !important;
+}
+.value-box i {
+    transition: transform 0.3s ease;
+}
+.value-box:hover i {
+    transform: scale(1.1);
+}
+
+/* 2. Section Headers (Premium Look) */
+.premium-section-title {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+.premium-section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: #b30000;
+}
+.view-all-btn {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #b30000;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid transparent;
+}
+.view-all-btn:hover {
+    color: #800000;
+    text-decoration: none;
+    border-bottom-color: #800000;
+}
+
+/* 3. Promo Banner CTA */
+.promo-banner-cta {
+    background: linear-gradient(135deg, #1a202c 0%, #000000 100%);
+    color: white;
+    border: 1px solid #333;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+.promo-banner-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+    animation: shine 6s infinite;
+}
+@keyframes shine {
+    0% { left: -100%; }
+    20% { left: 200%; }
+    100% { left: 200%; }
+}
+.promo-banner-cta:hover {
+    box-shadow: 0 15px 30px rgba(179, 0, 0, 0.3) !important;
+    border-color: #b30000;
+}
+
+/* 4. Brands Hover Effect */
+.brand-badge {
+    filter: grayscale(100%) opacity(0.5);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.brand-badge:hover {
+    filter: grayscale(0%) opacity(1);
+    transform: scale(1.1);
+}

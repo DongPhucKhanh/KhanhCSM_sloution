@@ -1,23 +1,23 @@
-﻿import React from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// 🔥 BỔ SUNG 1: Import CartProvider từ thư mục context
-import { CartProvider } from './context/CartContext';
+// 🔥 BỔ SUNG 1: Import CartProvider từ thư mục contexts và BrowserRouter từ react-router-dom
+import { CartProvider } from './contexts/CartContext';
+import { BrowserRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        {/* 🔥 BỔ SUNG 2: Bọc CartProvider bên ngoài App để toàn bộ hệ thống xài được giỏ hàng */}
-        <CartProvider>
-            <App />
-        </CartProvider>
+        {/* 🔥 BỔ SUNG 2: Bọc BrowserRouter ngoài cùng để kích hoạt định tuyến URL cho toàn bộ hệ thống */}
+        <BrowserRouter>
+            <CartProvider>
+                <App />
+            </CartProvider>
+        </BrowserRouter>
     </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

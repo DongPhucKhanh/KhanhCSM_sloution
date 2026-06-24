@@ -1,10 +1,14 @@
-.vs/
+# Build outputs
 bin/
 obj/
-*.user
-*.suo
-bin/
-obj/
+
+# Visual Studio
 .vs/
 *.user
 *.suo
+
+# Node.js (React Frontend)
+node_modules/
+
+# Logs
+*.log

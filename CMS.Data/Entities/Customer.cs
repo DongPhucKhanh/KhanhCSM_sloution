@@ -1,4 +1,4 @@
-﻿//Họ và tên: Đồng Phúc Khánh 
+//Họ và tên: Đồng Phúc Khánh 
 //    MSSV: 2123110051
 //    version: 1.0
 using System;
@@ -26,7 +26,7 @@ namespace CMS.Data.Entities
         public string? Address { get; set; }
 
         [Required]
-        public string Password { get; set; } // Lưu mật khẩu thô theo yêu cầu tối giản
+        public string Password { get; set; } // Lưu mật khẩu đã mã hóa SHA256
 
         public virtual ICollection<Order>? Orders { get; set; }
 

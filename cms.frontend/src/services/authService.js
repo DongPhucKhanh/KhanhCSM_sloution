@@ -1,8 +1,8 @@
-ï»¿// Há» vÃ  tÃªn: Äá»“ng PhÃºc KhÃ¡nh - MSSV: 2123110051
-import axiosClient from '../api/axiosClient';
+// H? và tên: Ð?ng Phúc Khánh - MSSV: 2123110051
+import axiosClient from './api';
 
 const authService = {
-    // ðŸ”¥ Bá»” SUNG: Truyá»n thÃªm phone, address vÃ o tham sá»‘ vÃ  payload gá»­i Ä‘i
+    // ?? B? SUNG: Truy?n thêm phone, address vào tham s? và payload g?i ði
     register: (fullName, email, password, phone, address) => {
         return axiosClient.post('/CustomerAuth/register', {
             fullName,

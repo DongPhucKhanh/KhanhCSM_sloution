@@ -1,11 +1,12 @@
-﻿// Họ và tên: Đồng Phúc Khánh - MSSV: 2123110051
+// Họ và tên: Đồng Phúc Khánh - MSSV: 2123110051
 import React, { useContext } from 'react';
-import { CartContext } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
+import { CartContext } from '../../contexts/CartContext';
 
-const IMAGE_BASE_URL = 'https://localhost:7004';
+const IMAGE_BASE_URL = process.env.REACT_APP_IMAGE_BASE_URL || 'https://localhost:7004';
 
-const Cart = ({ onContinueShopping, onCheckout }) => {
-    // Móc bộ não CartContext ra để lấy dữ liệu
+const CartPage = () => {
+    const navigate = useNavigate();
     const { cart, removeFromCart, updateQuantity, cartTotal } = useContext(CartContext);
 
     if (cart.length === 0) {
@@ -14,7 +15,7 @@ const Cart = ({ onContinueShopping, onCheckout }) => {
                 <i className="fa-solid fa-cart-arrow-down fa-4x text-muted mb-3"></i>
                 <h4 className="text-dark font-weight-bold">Giỏ hàng của bạn đang trống</h4>
                 <p className="text-muted">Chưa có linh kiện phụ tùng nào được thêm vào giỏ.</p>
-                <button onClick={onContinueShopping} className="btn btn-danger font-weight-bold mt-2 px-4 py-2">
+                <button onClick={() => navigate('/products')} className="btn btn-danger font-weight-bold mt-2 px-4 py-2">
                     <i className="fa-solid fa-arrow-left mr-2"></i> QUAY LẠI CỬA HÀNG
                 </button>
             </div>
@@ -80,7 +81,7 @@ const Cart = ({ onContinueShopping, onCheckout }) => {
                             </table>
                         </div>
                     </div>
-                    <button onClick={onContinueShopping} className="btn btn-light shadow-sm font-weight-bold mt-3 border">
+                    <button onClick={() => navigate('/products')} className="btn btn-light shadow-sm font-weight-bold mt-3 border">
                         <i className="fa-solid fa-arrow-left text-danger mr-2"></i> Tiếp tục mua sắm
                     </button>
                 </div>
@@ -101,7 +102,7 @@ const Cart = ({ onContinueShopping, onCheckout }) => {
                                 <span className="font-weight-bold" style={{ fontSize: '1.2rem' }}>TỔNG CỘNG:</span>
                                 <span className="font-weight-bold text-danger" style={{ fontSize: '1.5rem' }}>{cartTotal.toLocaleString('vi-VN')} đ</span>
                             </div>
-                            <button onClick={onCheckout} className="btn btn-danger btn-block btn-lg font-weight-bold text-uppercase rounded-pill shadow">
+                            <button onClick={() => navigate('/checkout')} className="btn btn-danger btn-block btn-lg font-weight-bold text-uppercase rounded-pill shadow">
                                 <i className="fa-solid fa-credit-card mr-2"></i> Tiến hành thanh toán
                             </button>
                         </div>
@@ -112,4 +113,4 @@ const Cart = ({ onContinueShopping, onCheckout }) => {
     );
 };
 
-export default Cart;
+export default CartPage;

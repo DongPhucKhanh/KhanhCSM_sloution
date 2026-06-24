@@ -1,6 +1,6 @@
-﻿// Họ và tên: Đồng Phúc Khánh - MSSV: 2123110051
+// H? v� t�n: �?ng Ph�c Kh�nh - MSSV: 2123110051
 import React, { useState, useEffect } from 'react';
-import blogService from '../services/blogService';
+import blogService from '../../services/blogService';
 
 const BlogCategoryList = ({ selectedBlogCategoryId, onSelectBlogCategory }) => {
     const [blogCategories, setBlogCategories] = useState([]);
@@ -13,7 +13,7 @@ const BlogCategoryList = ({ selectedBlogCategoryId, onSelectBlogCategory }) => {
                 const data = await blogService.getBlogCategories();
                 setBlogCategories(data);
             } catch (error) {
-                console.error("Lỗi hệ thống khi gọi API chuyên mục tin tức:", error);
+                console.error("L?i h? th?ng khi g?i API chuy�n m?c tin t?c:", error);
             } finally {
                 setLoading(false);
             }
@@ -22,24 +22,24 @@ const BlogCategoryList = ({ selectedBlogCategoryId, onSelectBlogCategory }) => {
     }, []);
 
     if (loading) {
-        return <div className="text-center my-3 text-muted small"><i className="fas fa-spinner fa-spin mr-2"></i>Đang nạp chủ đề...</div>;
+        return <div className="text-center my-3 text-muted small"><i className="fas fa-spinner fa-spin mr-2"></i>�ang n?p ch? �?...</div>;
     }
 
     return (
         <div className="modern-card">
             <div className="list-group list-group-flush">
-                {/* Nút xem Tất cả bài viết */}
+                {/* N�t xem T?t c? b�i vi?t */}
                 <button
                     type="button"
                     onClick={() => onSelectBlogCategory(null)}
                     className={`list-group-item list-group-item-action d-flex justify-content-between align-items-center ${selectedBlogCategoryId === null ? 'active' : ''}`}
                 >
-                    <span><i className="fa-solid fa-list-check mr-2 text-muted"></i>Tất cả bài viết</span>
+                    <span><i className="fa-solid fa-list-check mr-2 text-muted"></i>T?t c? b�i vi?t</span>
                     <span className="badge badge-light border text-muted px-2 py-1" style={{ fontSize: '0.7rem' }}>All</span>
                 </button>
 
                 {blogCategories.length === 0 ? (
-                    <div className="py-2 text-center text-muted small">Chưa có chủ đề nào.</div>
+                    <div className="py-2 text-center text-muted small">Ch�a c� ch? �? n�o.</div>
                 ) : (
                     blogCategories.map((cate) => (
                         <button

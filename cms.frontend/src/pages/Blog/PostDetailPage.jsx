@@ -1,11 +1,14 @@
-﻿// Họ và tên: Đồng Phúc Khánh - MSSV: 2123110051
+// Họ và tên: Đồng Phúc Khánh - MSSV: 2123110051
 // Chức năng: Giao diện hiển thị Chi tiết một bài viết tin tức
 import React, { useState, useEffect } from 'react';
-import blogService from '../services/blogService';
+import { useParams, useNavigate } from 'react-router-dom';
+import blogService from '../../services/blogService';
 
-const IMAGE_BASE_URL = 'https://localhost:7004';
+const IMAGE_BASE_URL = process.env.REACT_APP_IMAGE_BASE_URL || 'https://localhost:7004';
 
-const PostDetail = ({ postId, onBack }) => {
+const PostDetailPage = () => {
+    const { id: postId } = useParams();
+    const navigate = useNavigate();
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -45,7 +48,7 @@ const PostDetail = ({ postId, onBack }) => {
     return (
         <div className="post-detail-wrapper bg-white p-3">
             {/* Nút quay lại */}
-            <button onClick={onBack} className="btn btn-outline-danger btn-sm mb-4 rounded-pill px-3 font-weight-bold">
+            <button onClick={() => navigate(-1)} className="btn btn-outline-danger btn-sm mb-4 rounded-pill px-3 font-weight-bold">
                 <i className="fa-solid fa-arrow-left mr-2"></i> Quay lại danh sách
             </button>
 
@@ -81,4 +84,4 @@ const PostDetail = ({ postId, onBack }) => {
     );
 };
 
-export default PostDetail;
+export default PostDetailPage;

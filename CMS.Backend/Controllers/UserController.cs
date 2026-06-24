@@ -1,15 +1,17 @@
-﻿// Họ và tên: Đồng Phúc Khánh - MSSV: 2123110051
-// Chức năng: Điều phối nghiệp vụ CRUD quản trị tài khoản không sử dụng mã hóa băm
+// Họ và tên: Đồng Phúc Khánh - MSSV: 2123110051
+// Chức năng: CRUD quản trị tài khoản - Mã hóa mật khẩu SHA256 trước khi lưu (Tiêu chí 33)
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using CMS.Data.Entities;
 using CMS.Data;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace CMS.Backend.Controllers
 {
-    [Authorize(Roles = "Admin")] // Bảo mật Buổi 5: Chỉ duy nhất tài khoản Admin mới được vào trang này
+    [Authorize(Roles = "Admin")] // Chỉ Admin mới được quản lý tài khoản
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,31 +21,43 @@ namespace CMS.Backend.Controllers
             _context = context;
         }
 
-        // 1. XEM DANH SÁCH THÀNH VIÊN (Index)
+        // ============================================================
+        // HÀM MÃ HÓA SHA256 - Dùng chung trong Controller
+        // ============================================================
+        private string HashPassword(string password)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                var sb = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                    sb.Append(bytes[i].ToString("x2"));
+                return sb.ToString();
+            }
+        }
+
+        // 1. DANH SÁCH THÀNH VIÊN
         public IActionResult Index()
         {
             var users = _context.Users.ToList();
             return View(users);
         }
 
-        // 2. FORM THÊM THÀNH VIÊN MỚI (GET)
+        // 2. FORM THÊM THÀNH VIÊN (GET)
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        // 2. XỬ LÝ LƯU THÀNH VIÊN MỚI (POST)
+        // 2. LƯU THÀNH VIÊN MỚI (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(User model)
         {
             if (!ModelState.IsValid)
-            {
                 return View(model);
-            }
 
-            // Kiểm tra trùng lặp Tên đăng nhập trong hệ thống
             var checkExist = _context.Users.Any(u => u.Username == model.Username);
             if (checkExist)
             {
@@ -51,12 +65,15 @@ namespace CMS.Backend.Controllers
                 return View(model);
             }
 
+            // Mã hóa mật khẩu SHA256 trước khi lưu vào Database
+            model.Password = HashPassword(model.Password);
+
             _context.Users.Add(model);
-            _context.SaveChanges(); // Lưu dữ liệu thô trực tiếp xuống SQL Server
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
-        // 3. FORM CHỈNH SỬA THÀNH VIÊN (GET)
+        // 3. FORM CHỈNH SỬA (GET)
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -65,40 +82,33 @@ namespace CMS.Backend.Controllers
             return View(user);
         }
 
-        // 3. XỬ LÝ CẬP NHẬT THÀNH VIÊN (POST)
+        // 3. CẬP NHẬT THÀNH VIÊN (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, User model, string NewPassword)
         {
             if (id != model.Id) return NotFound();
 
-            // Loại bỏ kiểm tra tự động trường Password mặc định vì chúng ta xử lý qua ô NewPassword
             ModelState.Remove("Password");
 
             if (!ModelState.IsValid)
-            {
                 return View(model);
-            }
 
             var existingUser = _context.Users.AsNoTracking().FirstOrDefault(u => u.Id == id);
             if (existingUser == null) return NotFound();
 
-            // Xử lý mật khẩu thông minh: Nếu điền mật khẩu mới thì đổi, để trống thì giữ lại pass thô cũ
+            // Nếu nhập mật khẩu mới → băm rồi lưu. Để trống → giữ nguyên hash cũ
             if (!string.IsNullOrEmpty(NewPassword))
-            {
-                model.Password = NewPassword;
-            }
+                model.Password = HashPassword(NewPassword);
             else
-            {
                 model.Password = existingUser.Password;
-            }
 
             _context.Users.Update(model);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
-        // 4. THAO TÁC XÓA TÀI KHOẢN
+        // 4. XÓA TÀI KHOẢN
         public IActionResult Delete(int id)
         {
             var user = _context.Users.Find(id);

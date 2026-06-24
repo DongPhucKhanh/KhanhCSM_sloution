@@ -1,4 +1,4 @@
-﻿//Họ và tên: Đồng Phúc Khánh 
+//Họ và tên: Đồng Phúc Khánh 
 //    MSSV: 2123110051
 //    version: 1.0
 using System;
@@ -19,6 +19,9 @@ namespace CMS.Data.Entities
         public string Name { get; set; }
 
         public string? Description { get; set; }
+
+        // Ảnh đại diện danh mục (hiển thị khối hình vuông/tròn tại Frontend)
+        public string? ImageUrl { get; set; }
 
         // Quan hệ: Một danh mục có nhiều sản phẩm
         public virtual ICollection<Product>? Products { get; set; }
